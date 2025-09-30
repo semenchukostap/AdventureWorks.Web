@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SoapCore;
 using System.ServiceModel;
 
+// This is a new comment to verify we can access and modify this file
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
