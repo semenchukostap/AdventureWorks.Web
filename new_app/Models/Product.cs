@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AdventureWorks.Web.Models
@@ -45,8 +47,8 @@ namespace AdventureWorks.Web.Models
         
         public DateTime ModifiedDate { get; set; }
 
-        public virtual ProductCategory? ProductCategory { get; set; }
-        public virtual ProductModel? ProductModel { get; set; }
-        public virtual ICollection<SalesOrderDetail> SalesOrderDetail { get; set; } = null!;
+        public ProductCategory? ProductCategory { get; set; }
+        public ProductModel? ProductModel { get; set; }
+        public ICollection<SalesOrderDetail> SalesOrderDetail { get; set; } = null!;
     }
 }
