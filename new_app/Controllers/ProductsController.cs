@@ -57,7 +57,8 @@ namespace AdventureWorks.Web.Controllers
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        // To protect from overposting attacks, enable specific properties for binding.
+        // For more details, see https://docs.microsoft.com/aspnet/core/security/anti-request-forgery
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
@@ -94,7 +95,8 @@ namespace AdventureWorks.Web.Controllers
         }
 
         // POST: Products/Edit/5
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        // To protect from overposting attacks, enable specific properties for binding.
+        // For more details, see https://docs.microsoft.com/aspnet/core/security/anti-request-forgery
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
@@ -113,7 +115,7 @@ namespace AdventureWorks.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ProductId))
+                    if (!await ProductExistsAsync(product.ProductId))
                     {
                         return NotFound();
                     }
@@ -172,6 +174,11 @@ namespace AdventureWorks.Web.Controllers
         private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.ProductId == id);
+        }
+
+        private async Task<bool> ProductExistsAsync(int id)
+        {
+            return await _context.Product.AnyAsync(e => e.ProductId == id);
         }
     }
 }
