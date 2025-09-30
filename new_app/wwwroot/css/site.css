@@ -1,29 +1,100 @@
+:root {
+  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --bs-body-color: #212529;
+  --bs-body-bg: #fff;
+}
+
 html {
-  position: relative;
-  min-height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  margin-bottom: 60px;
+  font-family: var(--bs-font-sans-serif);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+  margin-top: auto;
+  padding: 1rem 0;
+  background-color: #f8f9fa;
+  text-align: center;
 }
 
 /* Custom styles for pre/code blocks in Services documentation */
 pre {
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.375rem;
   overflow: auto;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 code {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: var(--bs-font-monospace);
   font-size: 0.875em;
+  color: #d63384;
+}
+
+pre code {
+  color: #212529;
+  word-wrap: normal;
+}
+
+/* SOAP documentation specific styles */
+.soap-endpoint {
+  background-color: #e9f5fe;
+  border-left: 4px solid #0d6efd;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+.soap-method {
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.soap-param {
+  margin-left: 1rem;
+  padding: 0.25rem 0;
+}
+
+.soap-response {
+  background-color: #f0fff4;
+  border-left: 4px solid #198754;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  
+  pre {
+    padding: 0.75rem;
+    font-size: 0.85em;
+  }
+  
+  .soap-endpoint, .soap-response {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  h1, h2, h3 {
+    word-break: break-word;
+  }
+  
+  .footer {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
 }
