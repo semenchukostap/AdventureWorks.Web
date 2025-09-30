@@ -1,5 +1,8 @@
 using AdventureWorks.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AdventureWorks.Web.Services
 {
@@ -9,70 +12,106 @@ namespace AdventureWorks.Web.Services
 
         public ProductService(sampledbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public List<Product> GetAllProducts()
+        public async Task<List<Product>> GetAllProductsAsync()
         {
-            return _context.Product
+            return await _context.Product
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductModel)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Product? GetProductById(int id)
+        public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return _context.Product
+            return await _context.Product
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductModel)
-                .FirstOrDefault(p => p.ProductId == id);
+                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
-        public bool AddProduct(Product product)
+        public async Task<bool> AddProductAsync(Product product)
         {
+            if (product == null)
+            {
+                return false;
+            }
+
             try
             {
-                _context.Product.Add(product);
-                _context.SaveChanges();
+                await _context.Product.AddAsync(product);
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool UpdateProduct(Product product)
+        public async Task<bool> UpdateProductAsync(Product product)
         {
+            if (product == null)
+            {
+                return false;
+            }
+
             try
             {
                 _context.Entry(product).State = EntityState.Modified;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool DeleteProduct(int id)
+        public async Task<bool> DeleteProductAsync(int id)
         {
             try
             {
-                var product = _context.Product.Find(id);
+                var product = await _context.Product.FindAsync(id);
                 if (product != null)
                 {
                     _context.Product.Remove(product);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
                 return false;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
+        }
+
+        // Maintain backward compatibility with non-async methods
+        public List<Product> GetAllProducts()
+        {
+            return GetAllProductsAsync().GetAwaiter().GetResult();
+        }
+
+        public Product? GetProductById(int id)
+        {
+            return GetProductByIdAsync(id).GetAwaiter().GetResult();
+        }
+
+        public bool AddProduct(Product product)
+        {
+            return AddProductAsync(product).GetAwaiter().GetResult();
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            return UpdateProductAsync(product).GetAwaiter().GetResult();
+        }
+
+        public bool DeleteProduct(int id)
+        {
+            return DeleteProductAsync(id).GetAwaiter().GetResult();
         }
     }
 }
