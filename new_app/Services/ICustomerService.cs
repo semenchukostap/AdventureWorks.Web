@@ -1,5 +1,7 @@
 using AdventureWorks.Web.Models;
+using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace AdventureWorks.Web.Services
 {
@@ -7,18 +9,18 @@ namespace AdventureWorks.Web.Services
     public interface ICustomerService
     {
         [OperationContract]
-        List<Customer> GetAllCustomers();
+        Task<List<Customer>> GetAllCustomersAsync();
         
         [OperationContract]
-        Customer? GetCustomerById(int id);
+        Task<Customer?> GetCustomerByIdAsync(int id);
         
         [OperationContract]
-        bool AddCustomer(Customer customer);
+        Task<bool> AddCustomerAsync(Customer customer);
         
         [OperationContract]
-        bool UpdateCustomer(Customer customer);
+        Task<bool> UpdateCustomerAsync(Customer customer);
         
         [OperationContract]
-        bool DeleteCustomer(int id);
+        Task<bool> DeleteCustomerAsync(int id);
     }
 }
