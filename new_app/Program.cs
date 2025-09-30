@@ -43,7 +43,7 @@ app.UseCookiePolicy();
 app.UseRouting();
 app.UseAuthorization();
 
-// Configure SOAP endpoints
+// Configure SOAP endpoints and routing
 app.UseEndpoints(endpoints =>
 {
     endpoints.UseSoapEndpoint<IProductService>("/soap/ProductService.svc", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
