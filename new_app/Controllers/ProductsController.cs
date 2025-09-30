@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Web.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace AdventureWorks.Web.Controllers
 {
@@ -11,14 +13,18 @@ namespace AdventureWorks.Web.Controllers
 
         public ProductsController(sampledbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var sampledbContext = _context.Product.Include(p => p.ProductCategory).Include(p => p.ProductModel);
-            return View(await sampledbContext.ToListAsync());
+            var products = await _context.Product
+                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductModel)
+                .ToListAsync();
+                
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -51,6 +57,7 @@ namespace AdventureWorks.Web.Controllers
         }
 
         // POST: Products/Create
+        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
@@ -61,6 +68,7 @@ namespace AdventureWorks.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategory, "ProductCategoryId", "Name", product.ProductCategoryId);
             ViewData["ProductModelId"] = new SelectList(_context.ProductModel, "ProductModelId", "Name", product.ProductModelId);
             return View(product);
@@ -79,12 +87,14 @@ namespace AdventureWorks.Web.Controllers
             {
                 return NotFound();
             }
+            
             ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategory, "ProductCategoryId", "Name", product.ProductCategoryId);
             ViewData["ProductModelId"] = new SelectList(_context.ProductModel, "ProductModelId", "Name", product.ProductModelId);
             return View(product);
         }
 
         // POST: Products/Edit/5
+        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
@@ -114,6 +124,7 @@ namespace AdventureWorks.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategory, "ProductCategoryId", "Name", product.ProductCategoryId);
             ViewData["ProductModelId"] = new SelectList(_context.ProductModel, "ProductModelId", "Name", product.ProductModelId);
             return View(product);
@@ -146,12 +157,15 @@ namespace AdventureWorks.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Product.FindAsync(id);
-            if (product != null)
-            {
-                _context.Product.Remove(product);
-            }
             
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _context.Product.Remove(product);
             await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
