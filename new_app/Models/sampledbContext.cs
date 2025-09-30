@@ -28,7 +28,6 @@ namespace AdventureWorks.Web.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Not needed when using DI
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
