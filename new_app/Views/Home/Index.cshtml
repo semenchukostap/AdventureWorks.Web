@@ -1,0 +1,168 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Welcome to AdventureWorks Web</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">
+                        This application demonstrates a modern .NET 8 application with SOAP Web Services capabilities.
+                        Use the navigation menu to explore our product catalog and customer information.
+                    </p>
+                    <div class="alert alert-info">
+                        <strong>New in .NET 8:</strong> Enhanced performance, improved security, and modern SOAP service implementations.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-header">
+                    <h3>Quick Links</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a asp-controller="ProductCategories" asp-action="Index">Browse Product Categories</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a asp-controller="Products" asp-action="Index">View Products</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a asp-controller="Customers" asp-action="Index">Manage Customers</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOAP Services Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">SOAP Web Services</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        AdventureWorks Web provides SOAP Web Services for integration with legacy systems and third-party applications.
+                        These services enable programmatic access to our products and customer data.
+                    </p>
+
+                    <h4>Available SOAP Services</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Endpoint URL</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ProductService</td>
+                                    <td><code>/soap/ProductService.svc</code></td>
+                                    <td>Provides CRUD operations for products</td>
+                                </tr>
+                                <tr>
+                                    <td>CustomerService</td>
+                                    <td><code>/soap/CustomerService.svc</code></td>
+                                    <td>Provides CRUD operations for customers</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>How to Consume Our SOAP Services</h4>
+                    <div class="accordion" id="soapHelpAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Using Visual Studio
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#soapHelpAccordion">
+                                <div class="accordion-body">
+                                    <ol>
+                                        <li>In Visual Studio, right-click on your project references and select "Add Service Reference"</li>
+                                        <li>Enter the service URL (e.g., <code>https://your-domain.com/soap/ProductService.svc?wsdl</code>)</li>
+                                        <li>Provide a namespace for the service reference</li>
+                                        <li>Click "OK" to generate the proxy classes</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Using .NET Core CLI
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#soapHelpAccordion">
+                                <div class="accordion-body">
+                                    <p>Use the <code>dotnet-svcutil</code> tool:</p>
+                                    <pre><code>dotnet tool install --global dotnet-svcutil
+dotnet-svcutil https://your-domain.com/soap/ProductService.svc?wsdl</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Sample Code
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#soapHelpAccordion">
+                                <div class="accordion-body">
+                                    <p>Example of consuming the ProductService:</p>
+                                    <pre><code class="language-csharp">// Create a client
+var client = new ProductServiceClient();
+
+// Get all products
+var products = await client.GetAllProductsAsync();
+
+// Get product by ID
+var product = await client.GetProductByIdAsync(1);
+
+// Create new product
+var newProduct = new Product 
+{
+    Name = "New Item",
+    ProductNumber = "NI-1234",
+    // Set other properties...
+};
+bool success = await client.AddProductAsync(newProduct);</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-info-circle-fill"></i> For security reasons, SOAP services require authentication in production environments.
+                        Contact your system administrator for API keys or credentials.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Enable code syntax highlighting if a syntax highlighter library is available
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof hljs !== 'undefined') {
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            }
+        });
+    </script>
+}

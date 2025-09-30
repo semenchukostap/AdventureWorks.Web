@@ -1,0 +1,100 @@
+@{
+    ViewData["Title"] = "SOAP Services";
+}
+
+<h1>SOAP Services Documentation</h1>
+
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Product Service</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Endpoint URL</h5>
+                    <p><code>/soap/ProductService.svc</code></p>
+                    
+                    <h5>Available Operations</h5>
+                    <ul>
+                        <li><strong>GetAllProducts</strong> - Returns a list of all products</li>
+                        <li><strong>GetProductById</strong> - Returns a product by its ID</li>
+                        <li><strong>AddProduct</strong> - Adds a new product</li>
+                        <li><strong>UpdateProduct</strong> - Updates an existing product</li>
+                        <li><strong>DeleteProduct</strong> - Deletes a product by its ID</li>
+                    </ul>
+                    
+                    <h5>Example SOAP Request (GetProductById)</h5>
+                    <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+  &lt;soap:Body&gt;
+    &lt;GetProductById xmlns="http://tempuri.org/"&gt;
+      &lt;id&gt;1&lt;/id&gt;
+    &lt;/GetProductById&gt;
+  &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Customer Service</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Endpoint URL</h5>
+                    <p><code>/soap/CustomerService.svc</code></p>
+                    
+                    <h5>Available Operations</h5>
+                    <ul>
+                        <li><strong>GetAllCustomers</strong> - Returns a list of all customers</li>
+                        <li><strong>GetCustomerById</strong> - Returns a customer by its ID</li>
+                        <li><strong>AddCustomer</strong> - Adds a new customer</li>
+                        <li><strong>UpdateCustomer</strong> - Updates an existing customer</li>
+                        <li><strong>DeleteCustomer</strong> - Deletes a customer by its ID</li>
+                    </ul>
+                    
+                    <h5>Example SOAP Request (GetCustomerById)</h5>
+                    <pre><code>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+  &lt;soap:Body&gt;
+    &lt;GetCustomerById xmlns="http://tempuri.org/"&gt;
+      &lt;id&gt;1&lt;/id&gt;
+    &lt;/GetCustomerById&gt;
+  &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Consuming SOAP Services</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Using SoapUI</h5>
+                    <ol>
+                        <li>Download and install <a href="https://www.soapui.org/downloads/soapui/" target="_blank">SoapUI</a></li>
+                        <li>Create a new SOAP project</li>
+                        <li>Enter the WSDL URL: <code>https://[your-domain]/soap/ProductService.svc?wsdl</code> or <code>https://[your-domain]/soap/CustomerService.svc?wsdl</code></li>
+                        <li>SoapUI will automatically generate request templates for all available operations</li>
+                    </ol>
+                    
+                    <h5>Using C# Client</h5>
+                    <p>Add a service reference to your client project using the following URLs:</p>
+                    <ul>
+                        <li><code>https://[your-domain]/soap/ProductService.svc?wsdl</code></li>
+                        <li><code>https://[your-domain]/soap/CustomerService.svc?wsdl</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
