@@ -1,5 +1,8 @@
 using AdventureWorks.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AdventureWorks.Web.Services
 {
@@ -9,64 +12,88 @@ namespace AdventureWorks.Web.Services
 
         public CustomerService(sampledbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomersAsync()
         {
-            return _context.Customer.ToList();
+            return await _context.Customer.ToListAsync();
         }
 
-        public Customer? GetCustomerById(int id)
+        public async Task<Customer?> GetCustomerByIdAsync(int id)
         {
-            return _context.Customer.Find(id);
+            return await _context.Customer.FindAsync(id);
         }
 
-        public bool AddCustomer(Customer customer)
+        public async Task<bool> AddCustomerAsync(Customer customer)
         {
+            if (customer == null)
+            {
+                throw new ArgumentNullException(nameof(customer));
+            }
+
             try
             {
-                _context.Customer.Add(customer);
-                _context.SaveChanges();
+                await _context.Customer.AddAsync(customer);
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool UpdateCustomer(Customer customer)
+        public async Task<bool> UpdateCustomerAsync(Customer customer)
         {
+            if (customer == null)
+            {
+                throw new ArgumentNullException(nameof(customer));
+            }
+
             try
             {
                 _context.Entry(customer).State = EntityState.Modified;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await CustomerExistsAsync(customer.CustomerId))
+                {
+                    return false;
+                }
+                throw;
+            }
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool DeleteCustomer(int id)
+        public async Task<bool> DeleteCustomerAsync(int id)
         {
             try
             {
-                var customer = _context.Customer.Find(id);
-                if (customer != null)
+                var customer = await _context.Customer.FindAsync(id);
+                if (customer == null)
                 {
-                    _context.Customer.Remove(customer);
-                    _context.SaveChanges();
-                    return true;
+                    return false;
                 }
-                return false;
+
+                _context.Customer.Remove(customer);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
+        }
+
+        private async Task<bool> CustomerExistsAsync(int id)
+        {
+            return await _context.Customer.AnyAsync(c => c.CustomerId == id);
         }
     }
 }
