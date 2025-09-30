@@ -47,6 +47,6 @@ namespace AdventureWorks.Web.Models
 
         public virtual ProductCategory? ProductCategory { get; set; }
         public virtual ProductModel? ProductModel { get; set; }
-        public virtual ICollection<SalesOrderDetail> SalesOrderDetail { get; set; }
+        public virtual ICollection<SalesOrderDetail> SalesOrderDetail { get; set; } = null!;
     }
 }
