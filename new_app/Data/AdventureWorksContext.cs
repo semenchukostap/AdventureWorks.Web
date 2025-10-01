@@ -174,7 +174,7 @@ public class AdventureWorksContext : DbContext
 
             // Self-referencing relationship
             entity.HasOne(d => d.ParentProductCategory)
-                .WithMany(p => p.InverseParentProductCategory)
+                .WithMany(p => p.InverseParentProductCategories)
                 .HasForeignKey(d => d.ParentProductCategoryId);
         });
 
@@ -285,7 +285,7 @@ public class AdventureWorksContext : DbContext
 
             // Relationships
             entity.HasOne(d => d.BillToAddress)
-                .WithMany(p => p.SalesOrderHeaderBillToAddress)
+                .WithMany(p => p.SalesOrderHeadersBillTo)
                 .HasForeignKey(d => d.BillToAddressId);
 
             entity.HasOne(d => d.Customer)
@@ -294,7 +294,7 @@ public class AdventureWorksContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ShipToAddress)
-                .WithMany(p => p.SalesOrderHeaderShipToAddress)
+                .WithMany(p => p.SalesOrderHeadersShipTo)
                 .HasForeignKey(d => d.ShipToAddressId);
         });
     }
