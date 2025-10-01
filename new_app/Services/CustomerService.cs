@@ -19,6 +19,7 @@ public class CustomerService : ICustomerService
     /// </summary>
     /// <param name="context">The database context for AdventureWorks.</param>
     /// <param name="logger">The logger instance for this service.</param>
+    /// <exception cref="ArgumentNullException">Thrown when context or logger is null.</exception>
     public CustomerService(AdventureWorksContext context, ILogger<CustomerService> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -81,6 +82,7 @@ public class CustomerService : ICustomerService
     /// </summary>
     /// <param name="customer">The customer entity to create.</param>
     /// <returns>The created customer with generated ID.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when customer is null.</exception>
     public async Task<Customer> CreateCustomerAsync(Customer customer)
     {
         if (customer == null)
@@ -109,6 +111,7 @@ public class CustomerService : ICustomerService
     /// <param name="id">The ID of the customer to update.</param>
     /// <param name="customer">The customer entity with updated values.</param>
     /// <returns>True if the update was successful; false if the customer was not found or ID mismatch.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when customer is null.</exception>
     public async Task<bool> UpdateCustomerAsync(int id, Customer customer)
     {
         if (customer == null)
@@ -188,6 +191,14 @@ public class CustomerService : ICustomerService
     /// <returns>True if the customer exists; otherwise, false.</returns>
     private async Task<bool> CustomerExistsAsync(int id)
     {
-        return await _context.Customers.AnyAsync(e => e.CustomerId == id);
+        try
+        {
+            return await _context.Customers.AnyAsync(e => e.CustomerId == id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while checking if customer exists with ID: {CustomerId}", id);
+            throw;
+        }
     }
 }
