@@ -19,6 +19,7 @@ public class ProductService : IProductService
     /// </summary>
     /// <param name="context">The database context for AdventureWorks.</param>
     /// <param name="logger">The logger instance for ProductService.</param>
+    /// <exception cref="ArgumentNullException">Thrown when context or logger is null.</exception>
     public ProductService(AdventureWorksContext context, ILogger<ProductService> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -27,9 +28,9 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Retrieves all products with related ProductCategory and ProductModel data.
-    /// Migrated from legacy ProductsController.Index action.
+    /// This method includes navigation properties for category and model information.
     /// </summary>
-    /// <returns>A list of all products including related entities.</returns>
+    /// <returns>A list of all products including related category and model entities.</returns>
     public async Task<List<Product>> GetAllProductsAsync()
     {
         try
@@ -53,10 +54,10 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Retrieves a specific product by its ID with related ProductCategory and ProductModel data.
-    /// Migrated from legacy ProductsController.Details action.
+    /// Returns null if the product is not found.
     /// </summary>
-    /// <param name="id">The product ID.</param>
-    /// <returns>The product with the specified ID, or null if not found.</returns>
+    /// <param name="id">The product ID to retrieve.</param>
+    /// <returns>The product with the specified ID including related entities, or null if not found.</returns>
     public async Task<Product?> GetProductByIdAsync(int id)
     {
         try
@@ -74,7 +75,7 @@ public class ProductService : IProductService
             }
             else
             {
-                _logger.LogInformation("Successfully retrieved product with ID: {ProductId}", id);
+                _logger.LogInformation("Successfully retrieved product with ID: {ProductId} and Name: {ProductName}", id, product.Name);
             }
 
             return product;
@@ -88,10 +89,10 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Creates a new product in the database.
-    /// Migrated from legacy ProductsController.Create POST action.
     /// </summary>
     /// <param name="product">The product entity to create.</param>
     /// <returns>The created product with generated ID.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when product is null.</exception>
     public async Task<Product> CreateProductAsync(Product product)
     {
         if (product == null)
@@ -106,7 +107,7 @@ public class ProductService : IProductService
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully created product with ID: {ProductId}", product.ProductId);
+            _logger.LogInformation("Successfully created product with ID: {ProductId} and Name: {ProductName}", product.ProductId, product.Name);
             return product;
         }
         catch (Exception ex)
@@ -118,11 +119,12 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Updates an existing product in the database.
-    /// Migrated from legacy ProductsController.Edit POST action.
+    /// Validates that the ID parameter matches the product's ID.
     /// </summary>
     /// <param name="id">The ID of the product to update.</param>
     /// <param name="product">The updated product entity.</param>
     /// <returns>True if the update was successful, false if the ID mismatch or product not found.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when product is null.</exception>
     public async Task<bool> UpdateProductAsync(int id, Product product)
     {
         if (product == null)
@@ -168,7 +170,6 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Deletes a product from the database.
-    /// Migrated from legacy ProductsController.DeleteConfirmed action.
     /// </summary>
     /// <param name="id">The ID of the product to delete.</param>
     /// <returns>True if the deletion was successful, false if the product was not found.</returns>
@@ -188,7 +189,7 @@ public class ProductService : IProductService
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully deleted product with ID: {ProductId}", id);
+            _logger.LogInformation("Successfully deleted product with ID: {ProductId} and Name: {ProductName}", id, product.Name);
             return true;
         }
         catch (Exception ex)
@@ -200,7 +201,6 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Checks if a product exists in the database.
-    /// Migrated from legacy ProductsController.ProductExists helper method.
     /// </summary>
     /// <param name="id">The product ID to check.</param>
     /// <returns>True if the product exists, false otherwise.</returns>
