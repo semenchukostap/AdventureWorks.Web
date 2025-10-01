@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SoapCore;
-using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Text;
 using AdventureWorks.Soap.Data;
 using AdventureWorks.Soap.Services;
 using AdventureWorks.Soap.Services.Contracts;
@@ -54,22 +55,22 @@ app.UseEndpoints(endpoints =>
     // Configure ProductService SOAP endpoint
     endpoints.UseSoapEndpoint<IProductService>("/ProductService.asmx", new SoapEncoderOptions
     {
-        MessageVersion = System.ServiceModel.Channels.MessageVersion.Soap11,
-        WriteEncoding = System.Text.Encoding.UTF8
+        MessageVersion = MessageVersion.Soap11,
+        WriteEncoding = Encoding.UTF8
     }, SoapSerializer.DataContractSerializer);
 
     // Configure CustomerService SOAP endpoint
     endpoints.UseSoapEndpoint<ICustomerService>("/CustomerService.asmx", new SoapEncoderOptions
     {
-        MessageVersion = System.ServiceModel.Channels.MessageVersion.Soap11,
-        WriteEncoding = System.Text.Encoding.UTF8
+        MessageVersion = MessageVersion.Soap11,
+        WriteEncoding = Encoding.UTF8
     }, SoapSerializer.DataContractSerializer);
 
     // Configure ProductCategoryService SOAP endpoint
     endpoints.UseSoapEndpoint<IProductCategoryService>("/ProductCategoryService.asmx", new SoapEncoderOptions
     {
-        MessageVersion = System.ServiceModel.Channels.MessageVersion.Soap11,
-        WriteEncoding = System.Text.Encoding.UTF8
+        MessageVersion = MessageVersion.Soap11,
+        WriteEncoding = Encoding.UTF8
     }, SoapSerializer.DataContractSerializer);
 });
 
