@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace AdventureWorks.Web.Models;
 
 public partial class Customer
