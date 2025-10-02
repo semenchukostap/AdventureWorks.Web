@@ -1,5 +1,3 @@
-using System;
-
 namespace AdventureWorks.Web.Models;
 
 /// <summary>
